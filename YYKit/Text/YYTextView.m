@@ -314,6 +314,18 @@ typedef NS_ENUM(NSUInteger, YYTextMoveDirection) {
         });
     }
     [[YYTextEffectWindow sharedWindow] showSelectionDot:_selectionView];
+    UIView *superView = self.superview;
+    while (superView) {
+        if ([superView isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *sv = (UIScrollView *)superView;
+            if (_selectionView.selectionRects.count > 0) {
+                sv.panGestureRecognizer.enabled = NO;
+            } else {
+                sv.panGestureRecognizer.enabled = YES;
+            }
+        }
+        superView = superView.superview;
+    }
     
     if (containsDot) {
         [self _startSelectionDotFixTimer];
